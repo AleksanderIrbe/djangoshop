@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url, include
 
-from ecommapp.views import hello_world
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', hello_world, name='base'),
+    path('', include('ecommapp.urls')),
 ]
 
 if settings.DEBUG:
