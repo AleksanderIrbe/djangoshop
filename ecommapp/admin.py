@@ -1,7 +1,9 @@
 from django.contrib import admin
-from ecommapp.models import Category, Brand, Product
+from ecommapp.models import *
 
 admin.site.register(Brand)
+admin.site.register(CartItem)
+admin.site.register(Cart)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
