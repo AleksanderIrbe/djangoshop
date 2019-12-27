@@ -11,7 +11,23 @@
 	<p>{% lorem %}</p>
 	<hr>
 	<p style="font-size:25px;">Цена:<strong> {{ product.price }} </strong>руб</p>
-	<a href="{% url 'add_to_cart' slug=product.slug %}"><button class="btn btn-danger">Добавить в корзину</button></a>
+	<a href="{% url 'add_to_cart' slug=product.slug %}" class="add_to_cart" data-slug='{{ product.slug }}'><button class="btn btn-danger">Добавить в корзину</button></a>
 </div>
 
 {% endblock content %}
+  {% block javascript %}
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.add_to_cart').on('click', function(e){
+			e.preventDefault()
+			product_slug = $(this).attr('data-slug')
+			console.log(product_slug)
+		})
+	})
+</script>
+  {% endblock javascript %}
