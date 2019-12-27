@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from ecommapp.models import Category, Brand, Product, CartItem, Cart
 
@@ -97,11 +97,13 @@ def add_to_cart_view(request, slug):
 		cart = Cart.objects.get(id=cart_id)
 
 	product = Product.objects.get(slug=slug)
-	new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
-	if new_item not in cart.items.all():
-		cart.items.add(new_item)
-		cart.save()
-		return HttpResponseRedirect('/cart/')
+	# new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
+	# if new_item not in cart.items.all():
+	# 	cart.items.add(new_item)
+	# 	cart.save()
+	# 	return HttpResponseRedirect('/cart/')
+	cart.add_to_cart(slug)
+	return HttpResponseRedirect(reverse('cart'))
 
 def remove_from_cart_view(request, slug):
 	try:
@@ -115,8 +117,10 @@ def remove_from_cart_view(request, slug):
 		request.session['cart_id'] = cart_id
 		cart = Cart.objects.get(id=cart_id)
 	product = Product.objects.get(slug=slug)
-	for cart_item in cart.items.all():
-		if cart_item.product == product:
-			cart.items.remove(cart_item)
-			cart.save()
-			return HttpResponseRedirect('/cart/')
+	# for cart_item in cart.items.all():
+	# 	if cart_item.product == product:
+	# 		cart.items.remove(cart_item)
+	# 		cart.save()
+	# 		return HttpResponseRedirect('/cart/')
+	cart.remove_from_cart(slug)
+	return HttpResponseRedirect(reverse('cart'))
