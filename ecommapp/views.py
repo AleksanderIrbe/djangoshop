@@ -6,6 +6,18 @@ from ecommapp.models import Category, Brand, Product, CartItem, Cart
 # Create your views here.
 def base_view(request):
 #	cart = Cart.objects.first()
+
+	try:
+		cart_id = request.session['cart_id']
+		cart = Cart.objects.get(id=cart_id)
+		request.session['total'] = cart.items.count()
+	except:
+		cart = Cart()
+		cart.save()
+		cart_id = cart.id
+		request.session['cart_id'] = cart_id
+		cart = Cart.objects.get(id=cart_id)
+
 	categories = Category.objects.all()
 	products = Product.objects.all()
 	context = {
@@ -103,9 +115,8 @@ def remove_from_cart_view(request, slug):
 		request.session['cart_id'] = cart_id
 		cart = Cart.objects.get(id=cart_id)
 	product = Product.objects.get(slug=slug)
-	new_item, _ = CartItem.objects.get_or_create(product=product)
-	
-	if new_item not in cart.items.all():
-		cart.items.add(new_item)
-		cart.save()
-		return HttpResponseRedirect('/cart/')
+	for cart_item in cart.items.all():
+		if cart_item.product == product:
+			cart.items.remove(cart_item)
+			cart.save()
+			return HttpResponseRedirect('/cart/')

@@ -10,6 +10,7 @@ urlpatterns = [
 	path('category/<str:slug>/', category_view, name='category_detail'),
 	path('product/<str:slug>/', product_view, name='product_detail'),
 	path('add_to_cart/<str:slug>/', add_to_cart_view, name='add_to_cart'),
+	path('remove_from_cart/<str:slug>/', remove_from_cart_view, name = 'remove_from_cart'),
 	path('cart/', cart_view, name='cart'),
 
 

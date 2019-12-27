@@ -6,3 +6,5 @@ __pycache__/
 *.pyc
 
  ecommapp/__pycache__/
+ecommapp/.fuse_hidden0000002e00000002
+ecommapp/templates/.fuse_hidden0000002f00000001
