@@ -13,7 +13,7 @@
 
 <!-- Bootstrap core CSS -->
 <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
   <!-- Custom styles for this template -->
   <!-- <link href="css/shop-homepage.css" rel="stylesheet"> -->
   
@@ -44,7 +44,8 @@
           
           <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Категории <span class="caret"></span></a>
-        </li></ul>
+        </li>
+      </ul>
           <ul class="dropdown-menu">
             {% for category in categories %}
             <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
@@ -52,8 +53,9 @@
           </ul>
           
         {% endif %}
+
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="{% url 'cart' %}">Корзина <span class="badge">{{ cart.items.count }}</span></a></li>
+          <li><a href="{% url 'cart' %}">Корзина <span class="badge" id='cart_count'>{{ cart.items.count }}</span></a></li>
           
         </ul>
 
@@ -153,7 +155,7 @@
               <div class="card-footer">
                 <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
               </div>
-              <a href="{% url 'add_to_cart' slug=product.slug %}"><button class="btn btn-danger">Добавить в корзину</button></a>
+              <a href="#"><button class="btn btn-danger">Добавить в корзину</button></a>
             </div>
           </div>
           {% endblock product %}
@@ -185,11 +187,13 @@
   <!-- <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script> -->
-  <script
+<script
         src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
         crossorigin="anonymous"></script>
-  <script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+
+
   {% block javascript %}
     
   {% endblock javascript %}

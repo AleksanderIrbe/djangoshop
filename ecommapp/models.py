@@ -12,8 +12,8 @@ class Category(models.Model):
 		return self.name
 
 	def get_absolute_url(self):
-		#return reverse('category_detail', kwargs={'category_slug':self.slug})
-		return reverse('category_detail', kwargs={'slug':self.slug})
+		return reverse('category_detail', kwargs={'category_slug':self.slug})
+		#return reverse('category_detail', kwargs={'slug':self.slug})
 
 
 class Brand(models.Model):
@@ -45,8 +45,8 @@ class Product(models.Model):
 		return self.title
 
 	def get_absolute_url(self):
-		#return reverse('product_detail', kwargs={'product_slug':self.slug})
-		return reverse('product_detail', kwargs={'slug':self.slug})
+		return reverse('product_detail', kwargs={'product_slug':self.slug})
+		#return reverse('product_detail', kwargs={'slug':self.slug})
 
 class CartItem(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -63,17 +63,17 @@ class Cart(models.Model):
 	def __str__(self):
 		return str(self.id)
 
-	def add_to_cart(self, slug):
+	def add_to_cart(self, product_slug):
 		cart = self
-		product = Product.objects.get(slug=slug)
+		product = Product.objects.get(slug=product_slug)
 		new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
 		if new_item not in cart.items.all():
 			cart.items.add(new_item)
 			cart.save()
 
-	def remove_from_cart(self, slug):
+	def remove_from_cart(self, product_slug):
 		cart = self
-		product = Product.objects.get(slug=slug)
+		product = Product.objects.get(slug=product_slug)
 		for cart_item in cart.items.all():
 			if cart_item.product == product:
 				cart.items.remove(cart_item)
