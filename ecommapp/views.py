@@ -23,7 +23,7 @@ def base_view(request):
 	context = {
 		'categories':categories,
 		'products': products,
-#		'cart':cart,
+		'cart':cart,
 	}
 	return render(request, 'base.html', context)
 
@@ -52,6 +52,17 @@ def product_view(request, product_slug):
 
 def category_view(request, category_slug):
 #	cart = Cart.objects.first()
+	try:
+		cart_id = request.session['cart_id']
+		cart = Cart.objects.get(id=cart_id)
+		request.session['total'] = cart.items.count()
+	except:
+		cart = Cart()
+		cart.save()
+		cart_id = cart.id
+		request.session['cart_id'] = cart_id
+		cart = Cart.objects.get(id=cart_id)
+		
 	categories = Category.objects.all()
 	category = Category.objects.get(slug=category_slug)
 	products_of_category = Product.objects.filter(category=category)
@@ -59,7 +70,7 @@ def category_view(request, category_slug):
 		'categories':categories,
 		'category':category,
 		'products_of_category':products_of_category,
-#		'cart':cart
+		'cart':cart
 	}
 	return render(request, 'category.html', context)	
 
@@ -68,6 +79,7 @@ def test_view(request):
 
 def cart_view(request):
 #	cart = Cart.objects.first()
+	categories = Category.objects.all()
 	try:
 		cart_id = request.session['cart_id']
 		cart = Cart.objects.get(id=cart_id)
@@ -80,6 +92,7 @@ def cart_view(request):
 		cart = Cart.objects.get(id=cart_id)
 
 	context = {
+		'categories':categories,
 		'cart':cart
 	}
 	return render(request, 'cart.html', context)
