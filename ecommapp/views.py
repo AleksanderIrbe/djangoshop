@@ -1,6 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from ecommapp.models import Category, Brand, Product, CartItem, Cart
+from decimal import Decimal
 
 
 # Create your views here.
@@ -141,4 +142,25 @@ def remove_from_cart_view(request):
 	cart.remove_from_cart(product.slug)
 #	return HttpResponseRedirect(reverse('cart'))
 	return JsonResponse({'cart_total':cart.items.count()})
+
+
+def change_item_qty(request):
+	try:
+		cart_id = request.session['cart_id']
+		cart = Cart.objects.get(id=cart_id)
+		request.session['total'] = cart.items.count()
+	except:
+		cart = Cart()
+		cart.save()
+		cart_id = cart.id
+		request.session['cart_id'] = cart_id
+		cart = Cart.objects.get(id=cart_id)
+
+	qty = request.GET.get('qty')		
+	item_id = request.GET.get('item_id')
+	cart_item = CartItem.objects.get(id=int(item_id))
+	cart_item.qty = int(qty)
+	cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
+	cart_item.save()
+	return JsonResponse({'cart_total':cart.items.count(), 'item_total': cart_item.item_total})
 
