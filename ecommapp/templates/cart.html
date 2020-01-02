@@ -24,6 +24,13 @@
 			<td class="text-center"><a href="#" class='remove_from_cart' data-slug='{{ item.product.slug }}' data-id='{{ item.product.id }}'><button class="btn btn-default">Удалить из корзины</button></a></td>
 		</tr>
 	{% endfor %}
+<tr>
+	<td></td>
+	<td class="text-center">Итого: </td>
+	<td class="text-center" id='cart-total-price'><strong>{{ cart.cart_total }}</strong> руб.</td>
+	<td></td>
+
+</tr>
 </table>
 	
 {% endblock content %}
@@ -50,21 +57,22 @@
 				success:function(data){
 					$("#cart_count").html(data.cart_total)
 					$('.cart-item-'+item_product_id).css('display', 'none')
+					$('#cart-total-price').html('<strong>' + parseFloat(data.cart_total_price).toFixed(2)+ '</strong>' + ' руб.')
 				}
 			})
 		})
 	})
 
 
-</script>
+// </script>
 
-<script>
+// <script>
 $(document).ready(function(){
 	$('.cart-item-qty').on('click', function(){
 		qty = $(this).val()
 		item_id = $(this).attr('data-id')
-		console.log(qty)
-		console.log(item_id)
+		// console.log(qty)
+		// console.log(item_id)
 		data = {
 			qty: qty,
 			item_id: item_id
@@ -75,7 +83,10 @@ $(document).ready(function(){
 			data:data,
 			success: function(data){
 			$('#cart-item-total-'+item_id).html(parseFloat(data.item_total).toFixed(2)+ ' руб.')
-			}
+			console.log(data.item_total)
+			console.log(data.cart_total_price)
+			$('#cart-total-price').html('<strong>' + parseFloat(data.cart_total_price).toFixed(2)+ '</strong>' + ' руб.')
+				}
 			})
 	})
 })

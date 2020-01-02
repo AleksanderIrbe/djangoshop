@@ -118,8 +118,17 @@ def add_to_cart_view(request):
 	# 	cart.save()
 	# 	return HttpResponseRedirect('/cart/')
 	cart.add_to_cart(product.slug)
+
+	new_cart_total = 0.00
+	for item in cart.items.all():
+		new_cart_total += float(item.item_total)
+	cart.cart_total = new_cart_total
+	cart.save()
 	#return HttpResponseRedirect(reverse('cart'))
-	return JsonResponse({'cart_total':cart.items.count()})
+	return JsonResponse({
+		'cart_total':cart.items.count(),
+		'cart_total_price': cart.cart_total
+		})
 
 def remove_from_cart_view(request):
 	try:
@@ -140,8 +149,17 @@ def remove_from_cart_view(request):
 	# 		cart.save()
 	# 		return HttpResponseRedirect('/cart/')
 	cart.remove_from_cart(product.slug)
+	new_cart_total = 0.00
+	for item in cart.items.all():
+		new_cart_total += float(item.item_total)
+	cart.cart_total = new_cart_total
+	cart.save()
+	print(cart.cart_total)
 #	return HttpResponseRedirect(reverse('cart'))
-	return JsonResponse({'cart_total':cart.items.count()})
+	return JsonResponse({
+		'cart_total':cart.items.count(),
+		'cart_total_price': cart.cart_total
+		})
 
 
 def change_item_qty(request):
@@ -162,5 +180,14 @@ def change_item_qty(request):
 	cart_item.qty = int(qty)
 	cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
 	cart_item.save()
-	return JsonResponse({'cart_total':cart.items.count(), 'item_total': cart_item.item_total})
+	new_cart_total = 0.00
+	for item in cart.items.all():
+		new_cart_total += float(item.item_total)
+	cart.cart_total = new_cart_total
+	cart.save()
+	return JsonResponse({
+		'cart_total':cart.items.count(),
+		'item_total': cart_item.item_total,
+		'cart_total_price': cart.cart_total
+		})
 
